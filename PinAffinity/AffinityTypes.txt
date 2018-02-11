@@ -1,0 +1,50 @@
+# Affinity type list.  This lists the CPU affinity type classes
+# that can be set within the UI.
+#
+# Each type is listed on a separate line, in this format:
+#
+#   name:affinity
+#
+# The name is the display name as it will appear in the UI.  The
+# affinity is a 64-bit hex value for the affinity mask.  '1' bits
+# represent enabled CPUs.  The least significant bit is CPU #0.
+# FFFFFFFFFFFFFFFF enables all CPUs; 000000000000000F enables
+# only CPUs #0, 1, 2, and 3.  The program will automatically
+# remove bits for non-existent CPUs, so if you want to enable all
+# CPUs above a certain point, set all of the higher-order bits
+# to 1.
+#
+# Important:  the first entry is always the default used by
+# all processes that aren't set to any other type.
+#
+# The "factory settings" give cores 1, 2, and 3 to the Pinball
+# class, and everything else to the default Normal class.  This
+# arrangement scales well to different core counts, because the
+# cores are always numbered from 0, and assignments to cores
+# that don't exist are ignored.  So:
+#
+# Dual core -> VP gets core #1, everything else gets core #0
+# 4 cores   -> VP gets cores #1,2,3, everything else gets #0
+# 8 cores   -> VP gets cores #1,2,3, everything else gets #0,4,5,6,7
+#
+# VP seems to be able to make good use of three cores, since it
+# has two CPU-intensive, real-time threads (the main physics/
+# rendering thread, and VPinMAME), and numerous low-CPU but
+# real-time threads (D3D, DirectSound, DirectInput, and DOF).
+# The main VP and VPM threads are each busy enough to keep
+# a core busy, but the rest of the threads combined use so
+# little CPU that they won't saturate the third core.  It's
+# still worthwhile to give them that third core because that
+# will keep the latency low any time one of them needs to wake
+# up to service an event.  But the third core won't be
+# saturated, so there's probably no benefit in giving VP more
+# than the three.
+
+
+# DEFAULT ENTRY
+# "Normal" class -> exclude CPUs 1, 2, 3, allow all others.
+Normal:FFFFFFFFFFFFFFF1
+
+# "Pinball" class -> enable CPUs 1, 2, 3
+# for all non-pinball system tasks.
+Pinball:000000000000000E
