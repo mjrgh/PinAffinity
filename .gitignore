@@ -4,3 +4,4 @@ Debug/**
 PinAffinity/Debug/**
 PinAffinity/x64/**
 *.vcxproj.user
+*.aps
