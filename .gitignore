@@ -1,4 +1,6 @@
 .vs/**
 x64/**
 Debug/**
-
+PinAffinity/Debug/**
+PinAffinity/x64/**
+*.vcxproj.user
