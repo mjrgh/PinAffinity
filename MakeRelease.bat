@@ -21,7 +21,7 @@ rem #  Release files
 set FileList=PinAffinity.exe README.txt License.txt AffinityTypes.txt SavedProcesses.txt 
 
 rem #  Date suffix YYYY-MM-DD
-set datesuffix=%DATE:~10,4%-%DATE:~7,2%-%DATE:~4,2%
+set datesuffix=%DATE:~10,4%-%DATE:~4,2%-%DATE:~7,2%
 
 rem #  Build the 32-bit release
 set zip32=%BuildsDir%\PinAffinity32-%datesuffix%.zip
