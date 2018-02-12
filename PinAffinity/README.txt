@@ -28,7 +28,7 @@ background tasks.
 
 The program is set up to work out of the box for Visual Pinball and
 related software.  Just launch the program and leave it running in the
-background (with its window minimized) while you play games with VP.
+background (with the window minimized) while you use VP.
 
 The default configuration assigns VP cores #1, #2, and #3, and assigns
 the remaining cores to all other processes on the system.  This gives
@@ -38,6 +38,11 @@ make VP run more smoothly because it reduces the chance that VP will
 be interrupted at a critical moment when it has to update the physics
 or graphics rendering to keep up with real-time game action.  See
 "THEORY" below for more on why this helps.
+
+Note that the window minimizes to an icon the "system tray" - that's
+the little icon bar next to the clock, usually in the lower right
+corner of your monitor.  To bring the program window back, just click
+the tray icon.
 
 
 3. WHEN NOT TO USE IT

@@ -1,7 +1,9 @@
 .vs/**
 x64/**
 Debug/**
+Release/**
 PinAffinity/Debug/**
+PinAffinity/Release/**
 PinAffinity/x64/**
 *.vcxproj.user
 *.aps
