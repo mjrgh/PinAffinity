@@ -2,8 +2,12 @@
 x64/**
 Debug/**
 Release/**
+PinAffinity/BuildInfo/BuildInfo.h
 PinAffinity/Debug/**
 PinAffinity/Release/**
 PinAffinity/x64/**
+VersionInfoUpdater/Debug/**
+VersionInfoUpdater/Release/**
+VersionInfoUpdater/x64/**
 *.vcxproj.user
 *.aps

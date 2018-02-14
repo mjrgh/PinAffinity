@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="BuildInfo">
+      <UniqueIdentifier>{de92b3ba-3302-4031-b45a-56d7b3e7eb79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -40,6 +43,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogError.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,5 +84,8 @@
     <Text Include="README.txt" />
     <Text Include="License.txt" />
     <Text Include="SavedProcesses.txt" />
+    <Text Include="BuildInfo\BuildNumber.txt">
+      <Filter>BuildInfo</Filter>
+    </Text>
   </ItemGroup>
 </Project>

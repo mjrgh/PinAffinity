@@ -104,6 +104,9 @@ xcopy /d /y SavedProcesses.txt "$(OutDir)"
 xcopy /d /y README.txt "$(OutDir)"
 xcopy /d /y License.txt "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>"$(OutDir)VersionInfoUpdater" BuildInfo\BuildNumber.txt BuildInfo\BuildInfo.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,6 +130,9 @@ xcopy /d /y SavedProcesses.txt "$(OutDir)"
 xcopy /d /y README.txt "$(OutDir)"
 xcopy /d /y License.txt "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>"$(OutDir)VersionInfoUpdater" BuildInfo\BuildNumber.txt BuildInfo\BuildInfo.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -154,6 +160,9 @@ xcopy /d /y SavedProcesses.txt "$(OutDir)"
 xcopy /d /y README.txt "$(OutDir)"
 xcopy /d /y License.txt "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>"$(OutDir)VersionInfoUpdater" BuildInfo\BuildNumber.txt BuildInfo\BuildInfo.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -181,6 +190,9 @@ xcopy /d /y SavedProcesses.txt "$(OutDir)"
 xcopy /d /y README.txt "$(OutDir)"
 xcopy /d /y License.txt "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>"$(OutDir)VersionInfoUpdater" BuildInfo\BuildNumber.txt BuildInfo\BuildInfo.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FindParentMenu.h" />
@@ -192,6 +204,7 @@ xcopy /d /y License.txt "$(OutDir)"</Command>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="Version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FindParentMenu.cpp" />
@@ -216,6 +229,7 @@ xcopy /d /y License.txt "$(OutDir)"</Command>
     <Text Include="AffinityTypes.txt">
       <DeploymentContent>true</DeploymentContent>
     </Text>
+    <Text Include="BuildInfo\BuildNumber.txt" />
     <Text Include="License.txt" />
     <Text Include="README.txt">
       <DeploymentContent>true</DeploymentContent>
