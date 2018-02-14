@@ -34,7 +34,7 @@ executables not listed, follow these steps:
 
 The default configuration assigns VP cores #1, #2, and #3, and assigns
 the remaining cores to all other processes on the system.  This gives
-VP almost exclusive access to three cores (if you have a 4-core
+VP almost exclusive access to three cores (assuming you have a 4+ core
 system), which reduces preemption by background tasks.  This helps
 make VP run more smoothly because it reduces the chance that VP will
 be interrupted at a critical moment when it has to update the physics
@@ -167,7 +167,7 @@ select Set CPU Affinity Type to select its program group.
 6. ADVANCED CONFIGURATION
 
 One of the design goals for this project was to keep it really simple,
-which is why you don't see any dialogs full of "Core #0 ... Core #64"
+which is why you don't see any dialogs full of "Core #0 ... Core #63"
 checkboxes like you would in a more full-featured Task Manager type of
 tool.  The factory settings just give you two program "Types" that you
 can set - Normal and Pinball.  The CPU affinities of a program are
@@ -189,17 +189,29 @@ represents CPU #0.  For example, the mask 000000000000000F enables
 CPUs #0, 1, 2, and 3, because bits 0, 1, 2, and 3 are set to '1' and
 all other bits are set to '0'.
 
-For example:  this sets the Normal type to use CPU #0 only:
+This defines a type called "Normal" and sets it to use CPU #0 only:
 
    Normal:0000000000000001
 
-Note that the first entry in the file is always the default for
-processes that don't have other settings.  The name isn't important;
-you can call it Super Special Unique Non-Default Process Type and
-it'll still be the default as long as it's the first entry.
+The first entry in the file is always the default.  The default is
+what's used for processes that aren't explicitly assigned other Type
+settings.  The name of this first entry isn't important; all that
+matters is its position as the first entry.  You can call it "Super
+Special Rare Unique Definitely Non-Default Process Type" and it'll
+still be the default as long as it's the first entry.
 
 After editing this file, you'll have to close and re-launch the
 program for the new settings to take effect.
+
+The factory settings are as follows:
+
+    Normal:FFFFFFFFFFFFFFF1
+    Pinball:000000000000000E
+
+That assigns cores #1, 2, and 3 to designated Pinball programs and all
+of the other cores to all other programs.  These settings were chosen
+because they scale naturally to 2-, 4-, and 8-core systems.  There's
+more on this under THEORY below.
 
 
 7. THEORY
@@ -248,6 +260,43 @@ background tasks at all, so that "one set of cores" for the
 miscellaneous tasks can be reduced to a single core.  That gives you
 all of the rest of the system - 3 or 7 cores, depending on your CPU -
 for exclusive use by the pinball software.
+
+Note that this might not be the ideal layout for hyperthreaded
+processors.  Hyperthreaded CPUs show up in Windows as having twice as
+many "logical" (read: imaginary) cores as the chip actually has
+physical cores.  For example, my desktop's i7-3770 appears to have 8
+cores in Windows, even though it's physically a quad-core chip.
+That's because each physical core appears as two logical cores.
+Windows groups the logical pairs in its CPU numbering, so what Windows
+calls logical cores 0 and 1 are the first physical core in the CPU,
+logical cores 2-3 and the second physical core, and so on.  
+
+The big complication with hyperthreading is that it doesn't give you
+true, general-purpose concurrent execution on each logical pair; it
+gives you opportunistic concurrency that depends on how the
+instructions on the paired virtual cores happen to use the subunits
+within the core.  Some types of paired threads work well together to
+achieve a very high degree of true concurrency, and some clash to such
+an extent that they don't see any speedup from the extra logical core.
+Gamers generally consider hyperthreading to be a negative because of
+this unpredictability.  For VP, the best approach might be to take the
+logical cores out of the mix and use only the true cores.  So on a
+quad-core-with-hyperthreading CPU, we might do this:
+
+   Normal:03
+   Pinball:54
+
+That assigns cores 0 and 1 to default processes, and assigns cores 2,
+4, and 6 to Pinball, leaving cores 3, 5, and 7 unused.  It might seem
+counterproductive to essentially disable half the logical cores, but
+we're still using all of the physical cores, and we're doing so in
+such a way that each thread gets to run at full speed on the physical
+core it's assigned to, because there's less chance that a clashing
+thread can be scheduled on the logical core counterpart.  That might
+actually speed up the individual threads vs sharing logical pairs.
+Remember that stutter reduction is all about optimizing for real-time
+response, whereas hyperthreading's goal is to increase overall
+throughput, which can come at the expense of individual thread speed.
 
 
 8. HOW MANY CORES DOES VP ACTUALLY NEED?
