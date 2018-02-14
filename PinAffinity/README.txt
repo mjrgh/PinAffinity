@@ -13,22 +13,24 @@ self-contained and only uses files its own folder.
 in its own folder to save settings, and Windows doesn't allow this if
 it's located within the Program Files directory tree.)
 
-For automatic startup, create a shortcut to the .exe file in your
-Startup folder.  I recommend setting it to start in "Minimized" mode
-("Run: Minimized" on the Shortcut tab of the Properties window for the
-shortcut).
-
-You might also want to set "Run as Administrator" mode (click the
-Advanced button on the Properties window Shortcut tab.)  That allows
-PinAffinity to set affinities for most of the Windows system
-background tasks.
-
-
 2.  BASIC USE
 
 The program is set up to work out of the box for Visual Pinball and
 related software.  Just launch the program and leave it running in the
 background (with the window minimized) while you use VP.
+
+You'll notice several programs listed at the top, with "Pinball"
+listed in the Type column.  Those are the pinball programs that get
+special CPU core assignments.  If you're using any Visual Pinball
+executables not listed, follow these steps:
+
+* Select Program > Add Program... from the main menu
+
+* Navigate to the .EXE for your program and click Open
+
+* The program will now appear in the process list even if it's
+  not running.  Right click the program and select 
+  Set CPU Affinity Type > Pinball on the menu.
 
 The default configuration assigns VP cores #1, #2, and #3, and assigns
 the remaining cores to all other processes on the system.  This gives
@@ -45,7 +47,62 @@ corner of your monitor.  To bring the program window back, just click
 the tray icon.
 
 
-3. WHEN NOT TO USE IT
+3. AUTOMATIC LAUNCH AT STARTUP
+
+You'll probably also want to set up the program to launch each time
+you restart Windows so that it's always running while you play.
+
+The easiest way is to create a shortcut to the PinAffinity.exe file
+in your Start Menu > Programs > Startup folder.  After creating the
+shortcut, right-click it and open its Properties dialog, then select
+"Run: Minimized" in the Shortcut tab.  This will start it with its
+window minimized.
+
+The drawback of that easy setup is that Windows won't automatically
+run the PinAffinity in Administrator mode.  It's not necessary to do
+that, but if you don't, PinAffinity can't assign affinities for any of
+the Windows system background processes, which somewhat reduces its
+effectiveness, since that will leave more processes running with
+access to all cores.  Setting up automatic launch in Administrator
+mode is a little more work:
+
+* Run Windows Task Scheduler (use Windows+S to search for it)
+
+* Click Create Task in the Actions pane
+
+* On the General tab, enter a name (say, "Run PinAffinity")
+
+* !!! Click the box "Run with the highest privileges" !!!
+
+* On the Triggers tab, click New
+
+* In the "Begin the task" drop-down at the top, select 
+  "At log on"
+
+* Click OK
+
+* On the Actions tab, click New
+
+* Click Browse and select PinAffinity.exe
+
+* In the "Add arguments" box, type /MINIMIZE
+
+* Click OK
+
+* Click OK in the main dialog 
+
+The step marked !!! is the crucial one for making sure the program
+runs with Administrator privileges.  Of course, your user account must
+actually be an Administrator account for this to work, meaning you set
+it up in the Administrators group.  If you're using a limited user
+account, the "highest privileges" available will be standard user
+level privileges, so there's no benefit to using this more complicated
+approach; you might as well just set up the Startup shortcut as
+described earlier.
+
+
+
+4. WHEN NOT TO USE IT
 
 You might want to close PinAffinity when using your cab PC for major
 tasks other than playing pinball.  PinAffinity reserves CPU resources
@@ -59,7 +116,7 @@ it exits, so your system will be back to normal.  You can always start
 it up again when you're ready to go back to pinball playing.
 
 
-4.  CUSTOMIZING IT
+5. MORE DETAILS
 
 The main UI window shows a list of all running processes, similar
 to the Task Manager "Details" list.  There are two columns that
@@ -86,7 +143,6 @@ won't look familiar from Task Manager, though:
   these other processes as well if you use "Run As Administrator"
   when launching the program.
 
-
 The CPU Affinity settings for each program are determined by the
 Type setting for the program.  You can set each program's type
 by right-clicking on the program, selecting Set CPU Affinity Type,
@@ -103,35 +159,50 @@ not currently running.  Click Program > Add Program..., then select
 the application .EXE file for the program you want to add.  Note
 that only the name of the executable is stored, not the path, so
 copies of the same file from any folder will be covered by one
-entry.
+entry.  After you add a program, it will appear in the list even
+though it's not running.  You can now right-click the program and
+select Set CPU Affinity Type to select its program group.
 
 
-5. ADVANCED CONFIGURATION
+6. ADVANCED CONFIGURATION
 
-You can create your own custom affinity types, or change the standard
+One of the design goals for this project was to keep it really simple,
+which is why you don't see any dialogs full of "Core #0 ... Core #64"
+checkboxes like you would in a more full-featured Task Manager type of
+tool.  The factory settings just give you two program "Types" that you
+can set - Normal and Pinball.  The CPU affinities of a program are
+determined by the type you assign, so you don't have to mess with
+individual core assignments.
+
+Based on my own experience, this simple partitioning is all you need
+on a pin cab to get some significant performance improvements out of
+VP.  But I did make a small provision for more customized setups.  You
+can create your own custom affinity types, or change the standard
 types, but not through the UI.  You have to edit the text file
 AffinityTypes.txt (in the PinAffinity program folder).  This contains
 a list of the CPU affinity types available in the program.  The types
 are listed one per line; each entry has a name, which is used for
-display purposes, and an affinity mask, separated by a colon (:).  The
-affinity mask is a 64-bit hex value.  The least significant bit
+display purposes, and an affinity mask, separated by a colon (:).
+
+The affinity mask is a 64-bit hex value.  The least significant bit
 represents CPU #0.  For example, the mask 000000000000000F enables
 CPUs #0, 1, 2, and 3, because bits 0, 1, 2, and 3 are set to '1' and
 all other bits are set to '0'.
 
+For example:  this sets the Normal type to use CPU #0 only:
+
    Normal:0000000000000001
 
-That sets the standard "Normal" entry, which assigns all processes not
-otherwise configured to CPU #0 only.
-
-The first entry is always the default for processes that don't have
-other settings.  
+Note that the first entry in the file is always the default for
+processes that don't have other settings.  The name isn't important;
+you can call it Super Special Unique Non-Default Process Type and
+it'll still be the default as long as it's the first entry.
 
 After editing this file, you'll have to close and re-launch the
 program for the new settings to take effect.
 
 
-6. THEORY
+7. THEORY
 
 Virtual pinball is fundamentally a video game, which creates some
 special performance needs.  The main one is real-time execution: the
@@ -179,7 +250,7 @@ all of the rest of the system - 3 or 7 cores, depending on your CPU -
 for exclusive use by the pinball software.
 
 
-7. HOW MANY CORES DOES VP ACTUALLY NEED?
+8. HOW MANY CORES DOES VP ACTUALLY NEED?
 
 You might have read that Visual Pinball is single-threaded, so it
 might not seem necessary to give it more than one core to itself.
@@ -249,7 +320,7 @@ different numbers of cores:
   pinball tasks.
 
 
-8. IF YOU NEED SOMETHING MORE POWERFUL...
+9. IF YOU NEED SOMETHING MORE POWERFUL...
 
 PinAffinity is meant to be a simple tool to solve a specific problem.
 It's not a fully general CPU affinity tool, let alone a Task
