@@ -17,12 +17,13 @@ it's located within the Program Files directory tree.)
 
 The program is set up to work out of the box for Visual Pinball and
 related software.  Just launch the program and leave it running in the
-background (with the window minimized) while you use VP.
+background while you run games in VP.
 
-You'll notice several programs listed at the top, with "Pinball"
-listed in the Type column.  Those are the pinball programs that get
-special CPU core assignments.  If you're using any Visual Pinball
-executables not listed, follow these steps:
+When you open the PinAffinity window, you'll notice several programs
+listed at the top, with "Pinball" listed in the Type column.  Those
+are the pinball programs that get special CPU core assignments.  If
+you're using any Visual Pinball versions not already listed, follow
+these steps:
 
 * Select Program > Add Program... from the main menu
 
@@ -32,6 +33,29 @@ executables not listed, follow these steps:
   not running.  Right click the program and select 
   Set CPU Affinity Type > Pinball on the menu.
 
+The first time you run the program, you should test that it's working
+as follows.  Launch Visual Pinball and start playing a game.  With the
+game still running, switch back to the PinAffinity window.  Look for
+the Visual Pinball executable in the PinAffinity process list, e.g.,
+VPinballX.exe if you're running VP 10.  Make sure that the Affinity
+column shows something like "-+++".  If it says "Unable", it means
+that Windows blocked the affinity change because of user privilege
+restrictions.  You can get around this by exiting out of PinAffinity
+and re-launching it in Administrator mode, by right-clicking on the
+.exe file icon and selecting "Run as Administrator" from the menu.
+You'll probably want to run in Administrator mode anyway for routine
+use, because it allows the program to set affinities for the
+miscellaneous Windows background tasks that are always running.  Those
+tasks wake up at random times to do system chores, so it further helps
+VP performance to include them in the affinity settings and thereby
+keep them off the cores that VP is using.
+
+When you're running games, you should leave the PinAffinity program
+running, but it's best to minimize it so that it doesn't have to keep
+refreshing the window.  Note that the window minimizes to an icon in
+the "system tray" - the little icon bar next to the Windows desktop
+clock.  Just click the icon to bring the window back.
+
 The default configuration assigns VP cores #1, #2, and #3, and assigns
 the remaining cores to all other processes on the system.  This gives
 VP almost exclusive access to three cores (assuming you have a 4+ core
@@ -40,11 +64,6 @@ make VP run more smoothly because it reduces the chance that VP will
 be interrupted at a critical moment when it has to update the physics
 or graphics rendering to keep up with real-time game action.  See
 "THEORY" below for more on why this helps.
-
-Note that the window minimizes to an icon the "system tray" - that's
-the little icon bar next to the clock, usually in the lower right
-corner of your monitor.  To bring the program window back, just click
-the tray icon.
 
 
 3. AUTOMATIC LAUNCH AT STARTUP
@@ -56,15 +75,11 @@ The easiest way is to create a shortcut to the PinAffinity.exe file
 in your Start Menu > Programs > Startup folder.  After creating the
 shortcut, right-click it and open its Properties dialog, then select
 "Run: Minimized" in the Shortcut tab.  This will start it with its
-window minimized.
+window minimized.  However, this won't launch in Administrator mode,
+which you'll probably want to do.
 
-The drawback of that easy setup is that Windows won't automatically
-run the PinAffinity in Administrator mode.  It's not necessary to do
-that, but if you don't, PinAffinity can't assign affinities for any of
-the Windows system background processes, which somewhat reduces its
-effectiveness, since that will leave more processes running with
-access to all cores.  Setting up automatic launch in Administrator
-mode is a little more work:
+Setting up automatic launch in Administrator mode is a little more
+work, but not too hard:
 
 * Run Windows Task Scheduler (use Windows+S to search for it)
 
@@ -102,7 +117,7 @@ described earlier.
 
 
 
-4. WHEN NOT TO USE IT
+4. WHEN NOT TO USE PINAFFINITY
 
 You might want to close PinAffinity when using your cab PC for major
 tasks other than playing pinball.  PinAffinity reserves CPU resources
