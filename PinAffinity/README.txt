@@ -56,6 +56,15 @@ refreshing the window.  Note that the window minimizes to an icon in
 the "system tray" - the little icon bar next to the Windows desktop
 clock.  Just click the icon to bring the window back.
 
+(If you don't see the icon in the tray area, it's in the "hidden"
+portion of the tray.  Windows tries to reduce clutter in the tray by
+hiding icons that aren't actively trying to notify you of something.
+To see the hidden icons, click the little up-arrow next to the tray.
+The PinAffinity icon should be in the pop-up box that appears.  If you
+want the PinAffinity icon to stay visible in the main portion of the
+tray, click the up-arrow and then click "Customize".  Find PinAffinity
+in the list.  Change its setting to "Show icon and notifications".)
+
 The default configuration assigns VP cores #1, #2, and #3, and assigns
 the remaining cores to all other processes on the system.  This gives
 VP almost exclusive access to three cores (assuming you have a 4+ core
