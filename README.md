@@ -16,15 +16,30 @@ partition the CPU cores into groups assigned to "gaming" and
 of one or more designated cores.
 
 The reason this helps is that it can reduce latency in scheduling game
-threads.  It's not a matter of saturating a CPU; what matter is
-latency.  Video game software requires near instantaneous scheduling
-to keep graphics rendering and physics model evolution in sync with
-real time.  Reserving one or more cores for exclusive use by gaming
-threads can greatly improve the chances that a core is free to be
-scheduled immediately whenever a game thread has work to do.  That in
-turn improves the chances that the game can complete frame rendering
-in time for each video refresh and can update the physics model in
-time for the next graphics render pass.
+threads.  The tricky thing to understand here is that we're not
+talking about CPU cycles or how high the "% CPU" meter is reading for
+a given core.  What we're concerned with here is *scheduling latency*.
+That's the amount of time it takes for Windows to get around to
+resuming a suspended thread when that thread is ready to run again.
+For general software, that latency figure isn't very important,
+because what most software cares about is overall throughput - how
+many CPU cycles the program is getting, averaged over the long haul.
+But that long-term averaging doesn't work well for video games.  For
+video games, it's very important to do each individual video update
+and physics model update at exactly the right moment, so that the
+video animation is smooth and matches up with real time.  That's why
+latency is so important for video games.  When a video game thread is
+ready to run, it's critical that Windows runs it *right away*.
+
+How does core affinity help with this?  It helps by letting you give
+the game program more or less exclusive access to a given core, so
+that Windows won't have to accommodate other program threads running on
+the same core.  Keeping a given core free of non-game threads makes it
+more likely that the core will be free for the game's use whenever the
+game is ready to do a little bit more work, such as a video update.
+That in turn improves the chances that the game can complete frame
+rendering in time for each video refresh and can update the physics
+model in time for the next graphics render pass.
 
 PinAffinity is designed to make it easy to achieve partitioning like
 this.  First, it applies default CPU core affinities to every process

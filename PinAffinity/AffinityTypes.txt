@@ -39,6 +39,36 @@
 # up to service an event.  But the third core won't be
 # saturated, so there's probably no benefit in giving VP more
 # than the three.
+#
+# Note that this might not be the optimal arrangement on
+# hyperthreaded CPUs, so you might want to experiment with other
+# settings if your system has hyperthreading.  Windows assigns
+# adjacent core numbers to the virtual pairs in a hyperthreaded 
+# CPU: so cores #0 and #1 are the first physical core, with its
+# two virtual threads, cores #2 and #3 are the second physical
+# core, and so on.  Hyperthreading lets two program threads
+# share a physical core by dispatching the work that the two
+# threads do to different computation units within the core.
+# This can increase the overall throughput of the two threads
+# taken as a whole, but it tends to slow down each individual
+# thread quite a bit compared to how fast it would run if it
+# had the CPU all to itself.  For game software, we're usually
+# more concerned with the speed of each thread taken singly
+# than with overall combined throughput.  So even though it
+# seems counter-intuitive, games can actually run faster if
+# you use FEWER cores in a hyperthreading system.  In
+# particular, leaving core #1 idle will make the thread on
+# core #0 run faster, and likewise with the other virtual
+# pairs (2-3, 4-5, etc).  So for a hyperthreaded 8-core CPU,
+# for example, you might want to assign things as follows:
+#
+#    Pinball = cores 0, 2, 4  (0000000000000015)
+#    All other = cores 6+     (FFFFFFFFFFFFFFC0)   
+# 
+# We intentionally left cores 1, 3, and 5 with NOTHING 
+# assigned to them, to minimize the activity on those cores so 
+# that their virtual complement cores (0, 2, 4) can run their
+# threads as fast as possible.
 
 
 # DEFAULT ENTRY
