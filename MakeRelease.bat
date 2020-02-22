@@ -14,8 +14,8 @@ rem #
 
 rem #  Path configuration
 set BuildsDir=Builds
-set Release32=release
-set Release64=x64\release
+set Release32=Release
+set Release64=x64\Release
 
 rem #  Release files
 set FileList=PinAffinity.exe README.txt License.txt AffinityTypes.txt SavedProcesses.txt 

@@ -7,3 +7,5 @@ B2SBackglassServerEXE.exe:Pinball
 PinballX.exe:Pinball
 PinballY.exe:Pinball
 audiodg.exe:Pinball
+PinUpPlayer.exe:Pinball
+PinUpDisplay.exe:Pinball
