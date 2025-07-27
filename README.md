@@ -54,3 +54,44 @@ the designated affinity group.  There's no need to do anything
 manually during normal operation - just launch the program at system
 startup and leave it running in the background, and it'll take care of
 setting the desired CPU affinities as processes come and go.
+
+## Custom configurations
+
+Out of the box, the program has two categories, "Pinball" (for your
+pinball simulators and related programs) and "Normal" (for everything else).
+The Normal group is assigned core 0 and cores 4 and higher, and the Pinball
+group is assigned cores 1, 2, and 3.
+
+The default setup is really meant for 4-core system, which were the most
+common gaming CPUs at the time I first wrote the program.  CPUs have been
+steadily adding more cores since then, so you'll probably want to customize
+the configuration to better match your specific CPU.  You can do this by
+editing the file `AffinityTypes.txt`, found in the program install folder.
+
+`AffinityType.txt` also lets you create your own custom program categories
+beyond the "Pinball" and "Normal" groups.  This might be useful if you're
+running multiple pinball simulators that have different threading characteristics.
+It can be counterproductive to assign *too many* cores to a pinball program,
+since any cores that the program can't take advantage of could be used by
+background tasks instead.
+
+The `AffinityType.txt` file has extensive comments at the top of the
+file that explain the syntax, both for assigning CPU cores and for
+creating new custom categories.  As you might well expect from
+experience with virtually any other Windows programs, any changes you
+make to `AffinityType.txt` won't take effect until you restart
+PinAffinity.
+
+I know of no general or theoretical way to estimate the ideal number
+of cores to assign to a given program.  That's a function of the
+program's architecture and numerous minute details of its
+implementation, and probably even depends on the details of your
+system hardware.  The best guidance I can give you is to experiment
+with different settings and see what works best for your setup.  For
+older systems with only 4 cores, it seemed to work best to assign
+three of the four cores to the Pinball group, and reserve one core
+for everything else.  For newer systems with 8 or 12 or 16 cores,
+I'd probably start by going half and half - assign half the cores
+to the Pinball group, and the other half to everything else.  Then
+experiment with moving a few cores to one side or the other and see
+if it makes any difference.
